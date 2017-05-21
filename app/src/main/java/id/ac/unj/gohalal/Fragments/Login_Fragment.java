@@ -43,7 +43,7 @@ import org.json.JSONObject;
 public class Login_Fragment extends Fragment implements OnClickListener {
 	private static View view;
 
-	String URL= "http://gohalal.pe.hu/test/login.php";
+	String URL= "http://gohalal.pe.hu/testv2/index.php/Login";
 	JSONParser jsonParser =new JSONParser();
 	ProgressDialog pDialog;
 
@@ -224,14 +224,13 @@ public class Login_Fragment extends Fragment implements OnClickListener {
 				int resultjson = result.getInt("success");
 				if (resultjson == 1) {
 					pDialog.dismiss();
-
-					Toast.makeText(getActivity(), result.getString("message"),Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), result.getString("msg"),Toast.LENGTH_LONG).show();
 					Intent intent = new Intent(getActivity(), MapsActivity.class);
 					startActivity(intent);
 				} else {
 					pDialog.dismiss();
 					new CustomToast().Show_Toast(getActivity(), view,
-							result.getString("message"));
+							result.getString("msg"));
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
