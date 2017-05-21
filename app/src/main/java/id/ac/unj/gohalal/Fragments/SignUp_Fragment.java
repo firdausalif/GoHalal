@@ -191,16 +191,18 @@ public class SignUp_Fragment extends Fragment implements OnClickListener {
 
 		protected void onPostExecute(JSONObject result) {
 			try {
-                //fail nullpointer after using CI framework
-				int resultjson = result.getInt("status");
+				int resultjson = result.getInt("success");
 					if (resultjson == 1){
+						pDialog.dismiss();
 						new CustomToast().Show_Toast(getActivity(), view,
-								result.getString("message"));
+								result.getString("msg"));
 						new MainActivity().replaceLoginFragment();
 					} else if (resultjson == 0){
+						pDialog.dismiss();
 						new CustomToast().Show_Toast(getActivity(), view,
-								result.getString("message"));
+								result.getString("msg"));
 					}else{
+						pDialog.dismiss();
 						new CustomToast().Show_Toast(getActivity(), view,
 								"Cant register, try again!!");
 					}
