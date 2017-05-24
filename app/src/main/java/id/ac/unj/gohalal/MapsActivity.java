@@ -1,10 +1,8 @@
 package id.ac.unj.gohalal;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -21,7 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +47,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import id.ac.unj.gohalal.helper.JSONParser;
+import id.ac.unj.gohalal.SetterGetter.Restaurant;
+import id.ac.unj.gohalal.Helper.JSONParser;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -59,19 +57,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     String RESTAURANT_URL= "http://gohalal.pe.hu/testv2/index.php/Restaurant";
     ArrayList<HashMap<String, String>> dataMap = new ArrayList<HashMap<String, String>>();
+    private HashMap<Marker, Integer> mHashMap = new HashMap<Marker,Integer>();
+    ArrayList<Restaurant> restoList;
     JSONParser jParser = new JSONParser();
     JSONArray str_json = null;
     GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker, mShopMarker;
-    EditText targLoc;
-    TextView currLoc;
+    TextView currLoc,targLoc;
     ImageView currPlace;
     LocationRequest mLocationRequest;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     FloatingActionButton descButton;
+
+    String TAG_RESTO = "restaurant";
+    String TAG_ID = "id";
+    String TAG_NAMA = "nama";
+    String TAG_LOC = "langlat";
+    String TAG_LAT = "latitude";
+    String TAG_LONG = "longitude";
+    String TAG_DESKRIPSI = "deskripsi";
+    String TAG_ALAMAT = "alamat";
+    String TAG_TELP = "telp";
+    String TAG_EMAIL = "email";
+    String TAG_IMAGE = "image";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +90,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
 
         currLoc = (TextView) findViewById(R.id.currloc);
-        targLoc = (EditText)findViewById(R.id.targloc);
+        targLoc = (TextView)findViewById(R.id.targloc);
         descButton = (FloatingActionButton) findViewById(R.id.moreDesc);
         currPlace = (ImageView)findViewById(R.id.currentplace);
 
@@ -337,7 +348,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-       class getMarkerInfo extends AsyncTask<String, String, String> {
+    private void setRestolist(ArrayList<Restaurant> restoList) {
+        this.restoList = restoList;
+    }
+
+    class getMarkerInfo extends AsyncTask<String, String, String> {
+        HashMap<String, String> map = new HashMap<String, String>();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -362,6 +378,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     map.put("deskripsi", ar.getString("deskripsi"));
                     map.put("latitude",  latitude);
                     map.put("longitude",  longitude);
+                    map.put("alamat", ar.getString("alamat"));
+                    map.put("telp", ar.getString("telp"));
+                    map.put("image", ar.getString("image"));
+                    map.put("email", ar.getString("email"));
+
 
                     dataMap.add(map);
                 }
@@ -372,24 +393,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             return null;
         }
 
+
         protected void onPostExecute(String URL) {
+
             runOnUiThread(new Runnable() {
                 public void run() {
-                    for (int i = 0; i < dataMap.size(); i++)
-                    {
+                    final ArrayList<Restaurant> restList = new ArrayList<Restaurant>();
+                    for (int i = 0; i < dataMap.size(); i++) {
                         HashMap<String, String> map = new HashMap<String, String>();
                         map = dataMap.get(i);
-                        LatLng POSISI = new LatLng(Double.parseDouble(map.get("latitude")),
-                                Double.parseDouble(map.get("longitude")));
+
+                        LatLng POSISI = new LatLng(Double.parseDouble(map.get(TAG_LAT)),
+                                Double.parseDouble(map.get(TAG_LONG)));
+                        String nama = map.get(TAG_NAMA);
+                        String deskripsi = map.get(TAG_DESKRIPSI);
 
                         mShopMarker = mMap.addMarker(new MarkerOptions()
                                 .position(POSISI)
-                                .title(map.get("nama"))
-                                .snippet(map.get("deskripsi"))
+                                .title(nama)
+                                .snippet(deskripsi)
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory
                                         .HUE_GREEN)));
                     }
 
+                    mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        @Override
+                        public void onInfoWindowClick(Marker marker) {
+                            if(marker.getTitle().contains("Store")) {
+                                onMarkerClick(marker);
+                            }
+                        }
+                    });
                 }
             });
 
@@ -397,4 +431,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    public boolean onMarkerClick(Marker marker) {
+
+        for(int i = 0; i < dataMap.size(); i++) {
+            String nama = dataMap.get(i).get(TAG_NAMA);
+            String alamat = dataMap.get(i).get(TAG_ALAMAT);
+            String deskripsi = dataMap.get(i).get(TAG_DESKRIPSI);
+            String image = dataMap.get(i).get(TAG_IMAGE);
+            String telp = dataMap.get(i).get(TAG_TELP);
+            String email = dataMap.get(i).get(TAG_EMAIL);
+
+            if(marker.getTitle().equalsIgnoreCase(nama)){
+                Intent in = new Intent(getApplicationContext(),RestaurantActivity.class);
+                in.putExtra(TAG_NAMA, nama);
+                in.putExtra(TAG_ALAMAT, alamat);
+                in.putExtra(TAG_DESKRIPSI, deskripsi);
+                in.putExtra(TAG_IMAGE, image);
+                in.putExtra(TAG_TELP, telp);
+                in.putExtra(TAG_EMAIL,email);
+                startActivity(in);
+            }
+
+        }
+
+        return false;}
 }

@@ -3,12 +3,11 @@ package id.ac.unj.gohalal.Fragments;
 import java.util.ArrayList;
 
 import id.ac.unj.gohalal.MapsActivity;
-import id.ac.unj.gohalal.helper.CustomToast;
+import id.ac.unj.gohalal.Helper.CustomToast;
 import id.ac.unj.gohalal.R;
-import id.ac.unj.gohalal.helper.Utils;
+import id.ac.unj.gohalal.Helper.Utils;
 
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
@@ -34,7 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import id.ac.unj.gohalal.helper.JSONParser;
+import id.ac.unj.gohalal.Helper.JSONParser;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;

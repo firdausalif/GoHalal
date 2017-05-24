@@ -15,10 +15,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import id.ac.unj.gohalal.helper.CustomToast;
+import id.ac.unj.gohalal.Helper.CustomToast;
 import id.ac.unj.gohalal.MainActivity;
 import id.ac.unj.gohalal.R;
-import id.ac.unj.gohalal.helper.Utils;
+import id.ac.unj.gohalal.Helper.Utils;
 
 public class ForgotPassword_Fragment extends Fragment implements
 		OnClickListener {

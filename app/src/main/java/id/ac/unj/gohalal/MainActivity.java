@@ -1,9 +1,8 @@
 package id.ac.unj.gohalal;
 
 import id.ac.unj.gohalal.Fragments.Login_Fragment;
-import id.ac.unj.gohalal.helper.Utils;
+import id.ac.unj.gohalal.Helper.Utils;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

@@ -1,4 +1,4 @@
-package id.ac.unj.gohalal.helper;
+package id.ac.unj.gohalal.Helper;
 
 import id.ac.unj.gohalal.R;
 

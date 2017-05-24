@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import id.ac.unj.gohalal.helper.CustomToast;
+import id.ac.unj.gohalal.Helper.CustomToast;
 import id.ac.unj.gohalal.MainActivity;
 import id.ac.unj.gohalal.R;
-import id.ac.unj.gohalal.helper.Utils;
+import id.ac.unj.gohalal.Helper.Utils;
 
 import android.app.ProgressDialog;
 import android.content.res.ColorStateList;
@@ -27,7 +27,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import id.ac.unj.gohalal.helper.JSONParser;
+import id.ac.unj.gohalal.Helper.JSONParser;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;

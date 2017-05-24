@@ -29,5 +29,12 @@
     <string name="drawer_close">Close</string>
     <string name="current_location">Current Location</string>
     <string name="target_location">Finding Restaurant</string>
+    <string name="restoName">Restaurant Name: </string>
+    <string name="alamat">Address: </string>
+    <string name="telp">Phone: </string>
+    <string name="restoEmail">Email: </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
