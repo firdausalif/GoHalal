@@ -450,7 +450,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
                         public void onInfoWindowClick(Marker marker) {
-                            if(marker.getTitle().contains("Store")) {
+                            if(marker.getTitle().contains("restaurant")||
+                                    marker.getTitle().contains("Restaurant")) {
+
                                 onMarkerClick(marker);
                             }
                         }
