@@ -1,5 +1,6 @@
 package id.ac.unj.gohalal.SetterGetter;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 /**
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 public class MenuItem {
     private String nama,deskripsi,image;
     private Integer idresto,rate,price;
+    Context context;
 
     public String getNama() {
         return nama;
@@ -56,6 +58,14 @@ public class MenuItem {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Context getContext(){
+        return context;
+    }
+
+    public void setContext(Context context){
+        this.context = context;
     }
 
 }

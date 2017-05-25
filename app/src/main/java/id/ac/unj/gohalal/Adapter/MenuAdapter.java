@@ -2,6 +2,7 @@ package id.ac.unj.gohalal.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +28,19 @@ import id.ac.unj.gohalal.SetterGetter.MenuItem;
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     List<MenuItem> menus;
     Context context;
-    public MenuAdapter(String[] nama, String[] deskripsi, String[] images, int[]idresto, int[]rate, int[]price){
+    String TAG_NAMA = "nama";
+    String TAG_DESKRIPSI = "deskripsi";
+    String TAG_ALAMAT = "alamat";
+    String TAG_TELP = "telp";
+    String TAG_EMAIL = "email";
+    String TAG_IMAGE = "image";
+    String TAG_RATE = "rate";
+    String TAG_PRICE = "price";
+
+    public MenuAdapter(String[] nama, String[] deskripsi, String[] images, int[]idresto, int[]rate,
+                       int[]price, Context context){
         super();
         menus = new ArrayList<MenuItem>();
-
         for(int i =0; i<nama.length; i++){
             MenuItem menu = new MenuItem();
             menu.setNama(nama[i]);
@@ -39,6 +49,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             menu.setRate(rate[i]);
             menu.setPrice(price[i]);
             menu.setImage(images[i]);
+            menu.setContext(context);
             menus.add(menu);
         }
     }
@@ -53,19 +64,22 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         final MenuItem list =  menus.get(position);
+        context = list.getContext();
+
         holder.menuNama.setText(String.valueOf(list.getNama()));
         holder.menuHarga.setText("Rp. " + String.valueOf(list.getPrice()));
         holder.ratingMenu.setRating(list.getRate());
         Picasso.with(context).load(list.getImage()).into(holder.menuCover);
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(context, MenuActivity.class);
-                //intent.putExtra("nama", list.getNama());
-                //context.startActivity(intent);
-
-                Toast.makeText(context,"View Clicked", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, MenuActivity.class);
+                intent.putExtra(TAG_NAMA, list.getNama());
+                intent.putExtra(TAG_IMAGE, list.getImage());
+                intent.putExtra(TAG_PRICE, list.getPrice());
+                intent.putExtra(TAG_RATE, list.getRate());
+                context.startActivity(intent);
             }
         });
 
@@ -79,6 +93,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         public TextView menuNama;
         public TextView menuHarga;
         public ImageView menuCover;
+        public CardView cardView;
         RatingBar ratingMenu;
         View view;
 
@@ -86,6 +101,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             super(itemView);
             view = itemView;
 
+            cardView = (CardView) view.findViewById(R.id.card_view);
             menuNama = (TextView) view.findViewById(R.id.menuNama);
             menuHarga = (TextView) view.findViewById(R.id.menuHarga);
             ratingMenu = (RatingBar) view.findViewById(R.id.myRatingBar);

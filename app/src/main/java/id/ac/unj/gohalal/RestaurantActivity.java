@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import id.ac.unj.gohalal.Adapter.MenuAdapter;
 import id.ac.unj.gohalal.Helper.JSONParser;
 import id.ac.unj.gohalal.SetterGetter.MenuItem;
+import id.ac.unj.gohalal.SetterGetter.Restaurant;
 
 /**
  * Created by SuperNova's on 25/05/2017.
@@ -156,7 +157,8 @@ public class RestaurantActivity extends AppCompatActivity {
                             images[i] = array.getJSONObject(i).getString(TAG_IMAGE);
                             idresto[i]  = array.getJSONObject(i).getInt(TAG_IDRESTO);
 
-                            adapter = new MenuAdapter(nama,deskripsi,images, idresto,rate,price);
+                            adapter = new MenuAdapter(nama,deskripsi,images, idresto,rate,price,
+                                    RestaurantActivity.this);
                             recyclerView.setAdapter(adapter);
                             pDialog.dismiss();
                         }
