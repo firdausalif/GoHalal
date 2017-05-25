@@ -1,6 +1,7 @@
 package id.ac.unj.gohalal;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -16,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,9 +58,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LocationListener {
 
     String RESTAURANT_URL= "http://gohalal.pe.hu/testv2/index.php/Restaurant";
+
     ArrayList<HashMap<String, String>> dataMap = new ArrayList<HashMap<String, String>>();
-    private HashMap<Marker, Integer> mHashMap = new HashMap<Marker,Integer>();
-    ArrayList<Restaurant> restoList;
     JSONParser jParser = new JSONParser();
     JSONArray str_json = null;
     GoogleMap mMap;
@@ -71,6 +72,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     FloatingActionButton descButton;
+    ProgressDialog pDialog;
 
     String TAG_RESTO = "restaurant";
     String TAG_ID = "id";
@@ -83,6 +85,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     String TAG_TELP = "telp";
     String TAG_EMAIL = "email";
     String TAG_IMAGE = "image";
+    String TAG_RATE = "rate";
+    String TAG_MENU = "menu";
+    String TAG_PRICE = "price";
+    String TAG_IDRESTO = "idresto";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +113,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(toolbar);
 
         initNavigationDrawer();
+
         new getMarkerInfo().execute();
         currPlace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,6 +321,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    public boolean onMarkerClick(Marker marker) {
+
+        for(int i = 0; i < dataMap.size(); i++) {
+            String id = dataMap.get(i).get(TAG_ID);
+            String nama = dataMap.get(i).get(TAG_NAMA);
+            String alamat = dataMap.get(i).get(TAG_ALAMAT);
+            String deskripsi = dataMap.get(i).get(TAG_DESKRIPSI);
+            String image = dataMap.get(i).get(TAG_IMAGE);
+            String telp = dataMap.get(i).get(TAG_TELP);
+            String email = dataMap.get(i).get(TAG_EMAIL);
+            String rate = dataMap.get(i).get(TAG_RATE);
+
+            if(marker.getTitle().equalsIgnoreCase(nama)){
+                Intent in = new Intent(getApplicationContext(),RestaurantActivity.class);
+                in.putExtra(TAG_ID, id);
+                in.putExtra(TAG_NAMA, nama);
+                in.putExtra(TAG_ALAMAT, alamat);
+                in.putExtra(TAG_DESKRIPSI, deskripsi);
+                in.putExtra(TAG_IMAGE, image);
+                in.putExtra(TAG_TELP, telp);
+                in.putExtra(TAG_EMAIL,email);
+                in.putExtra(TAG_RATE, rate);
+
+
+                startActivity(in);
+            }
+
+        }
+
+        return false;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -348,40 +387,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void setRestolist(ArrayList<Restaurant> restoList) {
-        this.restoList = restoList;
-    }
-
     class getMarkerInfo extends AsyncTask<String, String, String> {
-        HashMap<String, String> map = new HashMap<String, String>();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
         protected String doInBackground(String... args) {
-            JSONObject json = jParser.AmbilJson(RESTAURANT_URL);
+            JSONObject json = jParser.getJson(RESTAURANT_URL);
+
             try {
-                str_json = json.getJSONArray("restaurant");
+                str_json = json.getJSONArray(TAG_RESTO);
 
                 for(int i = 0; i < str_json.length(); i++)
                 {
                     JSONObject ar = str_json.getJSONObject(i);
                     HashMap<String, String> map = new HashMap<String, String>();
 
-                    String LL = ar.getString("langlat");
+                    String LL = ar.getString(TAG_LOC);
                     String[] langlat = LL.split(",");
                     String latitude = langlat[0];
                     String longitude = langlat[1];
 
-                    map.put("nama", ar.getString("nama"));
-                    map.put("deskripsi", ar.getString("deskripsi"));
-                    map.put("latitude",  latitude);
-                    map.put("longitude",  longitude);
-                    map.put("alamat", ar.getString("alamat"));
-                    map.put("telp", ar.getString("telp"));
-                    map.put("image", ar.getString("image"));
-                    map.put("email", ar.getString("email"));
+                    map.put(TAG_ID, ar.getString(TAG_ID));
+                    map.put(TAG_NAMA, ar.getString(TAG_NAMA));
+                    map.put(TAG_DESKRIPSI, ar.getString(TAG_DESKRIPSI));
+                    map.put(TAG_LAT,  latitude);
+                    map.put(TAG_LONG,  longitude);
+                    map.put(TAG_ALAMAT, ar.getString(TAG_ALAMAT));
+                    map.put(TAG_TELP, ar.getString(TAG_TELP));
+                    map.put(TAG_IMAGE, ar.getString(TAG_IMAGE));
+                    map.put(TAG_EMAIL, ar.getString(TAG_EMAIL));
+                    map.put(TAG_RATE, ar.getString(TAG_RATE));
+
 
 
                     dataMap.add(map);
@@ -415,7 +453,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory
                                         .HUE_GREEN)));
                     }
-
                     mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
                         public void onInfoWindowClick(Marker marker) {
@@ -431,28 +468,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    public boolean onMarkerClick(Marker marker) {
 
-        for(int i = 0; i < dataMap.size(); i++) {
-            String nama = dataMap.get(i).get(TAG_NAMA);
-            String alamat = dataMap.get(i).get(TAG_ALAMAT);
-            String deskripsi = dataMap.get(i).get(TAG_DESKRIPSI);
-            String image = dataMap.get(i).get(TAG_IMAGE);
-            String telp = dataMap.get(i).get(TAG_TELP);
-            String email = dataMap.get(i).get(TAG_EMAIL);
 
-            if(marker.getTitle().equalsIgnoreCase(nama)){
-                Intent in = new Intent(getApplicationContext(),RestaurantActivity.class);
-                in.putExtra(TAG_NAMA, nama);
-                in.putExtra(TAG_ALAMAT, alamat);
-                in.putExtra(TAG_DESKRIPSI, deskripsi);
-                in.putExtra(TAG_IMAGE, image);
-                in.putExtra(TAG_TELP, telp);
-                in.putExtra(TAG_EMAIL,email);
-                startActivity(in);
-            }
 
-        }
-
-        return false;}
 }

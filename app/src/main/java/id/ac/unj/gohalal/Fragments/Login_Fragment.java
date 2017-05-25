@@ -220,17 +220,24 @@ public class Login_Fragment extends Fragment implements OnClickListener {
 			// dismiss the dialog once product deleted
 			//Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
 			try {
-				int resultjson = result.getInt("success");
-				if (resultjson == 1) {
-					pDialog.dismiss();
-					Toast.makeText(getActivity(), result.getString("msg"),Toast.LENGTH_LONG).show();
-					Intent intent = new Intent(getActivity(), MapsActivity.class);
-					startActivity(intent);
-				} else {
+				if(result != null){
+					int resultjson = result.getInt("success");
+					if (resultjson == 1) {
+						pDialog.dismiss();
+						Toast.makeText(getActivity(), result.getString("msg"),Toast.LENGTH_LONG).show();
+						Intent intent = new Intent(getActivity(), MapsActivity.class);
+						startActivity(intent);
+					} else {
+						pDialog.dismiss();
+						new CustomToast().Show_Toast(getActivity(), view,
+								result.getString("msg"));
+					}
+				}else{
 					pDialog.dismiss();
 					new CustomToast().Show_Toast(getActivity(), view,
-							result.getString("msg"));
+							"Ooopps something went wrong, try again!!");
 				}
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

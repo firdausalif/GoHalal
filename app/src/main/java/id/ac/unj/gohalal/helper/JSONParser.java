@@ -15,11 +15,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -32,6 +37,8 @@ public class JSONParser {
     static JSONArray jArr = null;
     static String json = "";
     static String error = "";
+
+    private static final String TAG = JSONParser.class.getSimpleName();
 
     // constructor
     public JSONParser() {
@@ -125,13 +132,12 @@ public class JSONParser {
         return sb.toString();
     }
 
-    public JSONObject AmbilJson(String url) {
-
+    public JSONObject getJson(String url) {
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(url);
+            HttpGet httpGet = new HttpGet(url);
 
-            HttpResponse httpResponse = httpClient.execute(httpPost);
+            HttpResponse httpResponse = httpClient.execute(httpGet);
             HttpEntity httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();
 
@@ -166,4 +172,5 @@ public class JSONParser {
         return jObj;
 
     }
+
 }
