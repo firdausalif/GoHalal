@@ -9,9 +9,12 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -41,6 +44,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
 
     TextView restoName, restoAlamat, restoPhone, restoEmail;
+    ImageView restoCover;
     String TAG_RESTO = "restaurant";
     String TAG_MENU = "menu";
     String TAG_ID = "id";
@@ -63,6 +67,7 @@ public class RestaurantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
 
+        restoCover = (ImageView) findViewById(R.id.pict) ;
         restoName = (TextView)findViewById(R.id.restoName);
         restoAlamat = (TextView)findViewById(R.id.isiAlamat);
         restoEmail = (TextView)findViewById(R.id.isiEmail);
@@ -79,22 +84,24 @@ public class RestaurantActivity extends AppCompatActivity {
 
     public void viewInformation(){
         Intent intent = getIntent();
-        String id = intent.getExtras().getString(TAG_ID);
-        String nama = intent.getExtras().getString(TAG_NAMA);
-        String alamat = intent.getExtras().getString(TAG_ALAMAT);
-        String deskripsi = intent.getExtras().getString(TAG_DESKRIPSI);
-        String image = intent.getExtras().getString(TAG_IMAGE);
-        String telp = intent.getExtras().getString(TAG_TELP);
-        String email = intent.getExtras().getString(TAG_EMAIL);
-        int rate = intent.getExtras().getInt(TAG_RATE);
+        final String id = intent.getExtras().getString(TAG_ID);
+        final String nama = intent.getExtras().getString(TAG_NAMA);
+        final String alamat = intent.getExtras().getString(TAG_ALAMAT);
+        final String deskripsi = intent.getExtras().getString(TAG_DESKRIPSI);
+        final String image = intent.getExtras().getString(TAG_IMAGE);
+        final String telp = intent.getExtras().getString(TAG_TELP);
+        final String email = intent.getExtras().getString(TAG_EMAIL);
+        final int rate = intent.getExtras().getInt(TAG_RATE);
+
+
 
         if(intent.getExtras() != null){
             restoName.setText(nama);
             restoEmail.setText(email);
             restoAlamat.setText(alamat);
             restoPhone.setText(telp);
+            Picasso.with(RestaurantActivity.this).load(image).into(restoCover);
         }
-
         LoadData loadData= new LoadData();
         loadData.execute(id);
     }
@@ -160,6 +167,5 @@ public class RestaurantActivity extends AppCompatActivity {
         }
 
     }
-
 
 }

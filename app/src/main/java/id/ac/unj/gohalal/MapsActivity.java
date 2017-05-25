@@ -343,8 +343,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 in.putExtra(TAG_TELP, telp);
                 in.putExtra(TAG_EMAIL,email);
                 in.putExtra(TAG_RATE, rate);
-
-
                 startActivity(in);
             }
 
@@ -420,8 +418,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     map.put(TAG_EMAIL, ar.getString(TAG_EMAIL));
                     map.put(TAG_RATE, ar.getString(TAG_RATE));
 
-
-
                     dataMap.add(map);
                 }
             } catch (JSONException e) {
@@ -431,9 +427,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             return null;
         }
 
-
         protected void onPostExecute(String URL) {
-
             runOnUiThread(new Runnable() {
                 public void run() {
                     final ArrayList<Restaurant> restList = new ArrayList<Restaurant>();

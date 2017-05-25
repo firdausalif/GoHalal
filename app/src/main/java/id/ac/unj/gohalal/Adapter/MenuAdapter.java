@@ -1,8 +1,6 @@
 package id.ac.unj.gohalal.Adapter;
 
-import android.app.LauncherActivity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +9,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +23,7 @@ import id.ac.unj.gohalal.SetterGetter.MenuItem;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     List<MenuItem> menus;
-
+    Context context;
     public MenuAdapter(String[] nama, String[] deskripsi, String[] images, int[]idresto, int[]rate, int[]price){
         super();
         menus = new ArrayList<MenuItem>();
@@ -52,22 +48,13 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     }
 
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Thread thread = new Thread(new Runnable(){
-            @Override
-            public void run() {
-                try {
-                    //Your code goes here
-                    MenuItem list =  menus.get(position);
-                    holder.menuNama.setText(String.valueOf(list.getNama()));
-                    holder.menuHarga.setText("Rp. " + String.valueOf(list.getPrice()));
-                    holder.ratingMenu.setRating(list.getRate());
-                    holder.menuCover.setImageBitmap(getBitmapFromURL(list.getImage()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+
+        MenuItem list =  menus.get(position);
+        holder.menuNama.setText(String.valueOf(list.getNama()));
+        holder.menuHarga.setText("Rp. " + String.valueOf(list.getPrice()));
+        holder.ratingMenu.setRating(list.getRate());
+        Picasso.with(context).load(list.getImage()).into(holder.menuCover);
+
     }
 
     public int getItemCount() {
@@ -90,19 +77,5 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         }
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
 }
