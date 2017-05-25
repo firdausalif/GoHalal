@@ -77,7 +77,6 @@ public class RestaurantActivity extends AppCompatActivity {
         restoAlamat = (TextView)findViewById(R.id.isiAlamat);
         restoEmail = (TextView)findViewById(R.id.isiEmail);
         restoPhone = (TextView)findViewById(R.id.isiTelp);
-        restoDeskripsi = (TextView)findViewById(R.id.isiDeskripsi);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -106,7 +105,6 @@ public class RestaurantActivity extends AppCompatActivity {
             restoEmail.setText(email);
             restoAlamat.setText(alamat);
             restoPhone.setText(telp);
-            restoDeskripsi.setText(deskripsi);
             Picasso.with(RestaurantActivity.this).load(image).into(restoCover);
         }
 
