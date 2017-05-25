@@ -52,81 +52,82 @@
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="105dp">
 
                                 <TextView
                                     android:id="@+id/restoAlamat"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
                                     android:layout_margin="5dp"
                                     android:text="@string/alamat"
-                                   android:layout_alignParentLeft="true"
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:layout_margin="5dp"
                                     android:id="@+id/isiAlamat"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="right"
-                                    android:layout_toRightOf="@id/restoAlamat"/>
+                                    android:layout_margin="5dp"
+                                    android:layout_toRightOf="@id/restoAlamat"
+                                    android:gravity="right" />
 
                                 <TextView
                                     android:id="@+id/restoTelp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_below="@id/restoAlamat"
                                     android:layout_margin="5dp"
                                     android:text="@string/telp"
-                                    android:layout_below="@id/restoAlamat"
-                                    android:layout_alignParentLeft="true"
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:layout_margin="5dp"
                                     android:id="@+id/isiTelp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="right"
                                     android:layout_below="@id/restoAlamat"
-                                    android:layout_toRightOf="@id/restoTelp" />
+                                    android:layout_margin="5dp"
+                                    android:layout_toRightOf="@id/restoTelp"
+                                    android:gravity="right" />
 
                                 <TextView
                                     android:id="@+id/restoEmail"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_below="@id/restoTelp"
                                     android:layout_margin="5dp"
                                     android:text="@string/restoEmail"
-                                    android:layout_below="@id/restoTelp"
-                                    android:layout_alignParentLeft="true"
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:layout_margin="5dp"
                                     android:id="@+id/isiEmail"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="right"
                                     android:layout_below="@id/restoTelp"
-                                    android:layout_toRightOf="@id/restoEmail"/>
+                                    android:layout_margin="5dp"
+                                    android:layout_toRightOf="@id/restoEmail"
+                                    android:gravity="right" />
 
                                 <TextView
                                     android:id="@+id/restoDeskripsi"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_below="@id/restoEmail"
                                     android:layout_margin="5dp"
                                     android:text="@string/deskripsi"
-                                    android:layout_below="@id/restoEmail"
-                                    android:layout_alignParentLeft="true"
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:layout_margin="5dp"
                                     android:id="@+id/isiDeskripsi"
                                     android:layout_width="wrap_content"
+                                    android:layout_gravity="center_vertical|right"
                                     android:layout_height="wrap_content"
-                                    android:gravity="right"
-                                    android:layout_below="@id/restoEmail"
-                                    android:layout_toRightOf="@id/restoDeskripsi"/>
+                                    android:layout_below="@id/restoDeskripsi"
+                                    android:layout_margin="5dp"
+                                    android:layout_toRightOf="@id/restoEmail"
+                                    android:gravity="right" />
                         </RelativeLayout>
 
                 </android.support.v7.widget.CardView>

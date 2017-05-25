@@ -27,12 +27,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
 import id.ac.unj.gohalal.Adapter.MenuAdapter;
 import id.ac.unj.gohalal.Helper.JSONParser;
+import id.ac.unj.gohalal.SetterGetter.MenuItem;
 
 /**
  * Created by SuperNova's on 25/05/2017.
@@ -47,6 +49,7 @@ public class RestaurantActivity extends AppCompatActivity {
     ProgressDialog pDialog;
 
     String MENU_URL= "http://gohalal.pe.hu/testv2/index.php/Restomenu";
+    private static ArrayList<MenuItem> menuList;
 
     TextView restoName, restoAlamat, restoPhone, restoEmail, restoDeskripsi;
     ImageView restoCover;
