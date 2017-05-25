@@ -1,7 +1,10 @@
 package id.ac.unj.gohalal;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import id.ac.unj.gohalal.Adapter.MenuAdapter;
@@ -120,11 +127,12 @@ public class RestaurantActivity extends AppCompatActivity {
                 if(result != null){
                     JSONArray array = result.getJSONArray(TAG_MENU);
 
-                    String [] nama = new String[array.length()];
-                    String [] deskripsi = new String[array.length()];
-                    int [] price = new int[array.length()];
-                    int [] rate = new int[array.length()];
-                    int [] idresto = new int[array.length()];
+                    String[] nama = new String[array.length()];
+                    String[] deskripsi = new String[array.length()];
+                    String[] images = new String[array.length()];
+                    int[] price = new int[array.length()];
+                    int[] rate = new int[array.length()];
+                    int[] idresto = new int[array.length()];
 
                     if(array != null || !array.equals("")){
                         for(int i = 0; i < array.length(); i++) {
@@ -132,11 +140,12 @@ public class RestaurantActivity extends AppCompatActivity {
                             deskripsi[i] = array.getJSONObject(i).getString(TAG_DESKRIPSI);
                             price[i] = array.getJSONObject(i).getInt(TAG_PRICE);
                             rate[i] = array.getJSONObject(i).getInt(TAG_RATE);
+                            images[i] = array.getJSONObject(i).getString(TAG_IMAGE);
                             idresto[i]  = array.getJSONObject(i).getInt(TAG_IDRESTO);
 
-                            adapter = new MenuAdapter(nama,deskripsi,idresto,rate,price);
-                            pDialog.dismiss();
+                            adapter = new MenuAdapter(nama,deskripsi,images, idresto,rate,price);
                             recyclerView.setAdapter(adapter);
+                            pDialog.dismiss();
                         }
                     }
                 }else {
@@ -151,5 +160,6 @@ public class RestaurantActivity extends AppCompatActivity {
         }
 
     }
+
 
 }

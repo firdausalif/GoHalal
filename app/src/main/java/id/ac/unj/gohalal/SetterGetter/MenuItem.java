@@ -7,9 +7,8 @@ import android.graphics.Bitmap;
  */
 
 public class MenuItem {
-    private String nama,deskripsi;
+    private String nama,deskripsi,image;
     private Integer idresto,rate,price;
-    private Bitmap image;
 
     public String getNama() {
         return nama;
@@ -51,11 +50,11 @@ public class MenuItem {
         this.rate = rate;
     }
 
-    public Bitmap getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Bitmap image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
