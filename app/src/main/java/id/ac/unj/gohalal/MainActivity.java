@@ -8,6 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+/**
+ * Created by SuperNova's on 25/05/2017.
+ */
+
 public class MainActivity extends AppCompatActivity {
 	private static FragmentManager fragmentManager;
 

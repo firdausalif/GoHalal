@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.sax.StartElementListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +34,9 @@ import java.util.ArrayList;
 import id.ac.unj.gohalal.Adapter.MenuAdapter;
 import id.ac.unj.gohalal.Helper.JSONParser;
 
+/**
+ * Created by SuperNova's on 25/05/2017.
+ */
 
 public class RestaurantActivity extends AppCompatActivity {
 
@@ -42,17 +48,12 @@ public class RestaurantActivity extends AppCompatActivity {
 
     String MENU_URL= "http://gohalal.pe.hu/testv2/index.php/Restomenu";
 
-
-    TextView restoName, restoAlamat, restoPhone, restoEmail;
+    TextView restoName, restoAlamat, restoPhone, restoEmail, restoDeskripsi;
     ImageView restoCover;
-    String TAG_RESTO = "restaurant";
     String TAG_MENU = "menu";
     String TAG_ID = "id";
     String TAG_IDRESTO = "idresto";
     String TAG_NAMA = "nama";
-    String TAG_LOC = "langlat";
-    String TAG_LAT = "latitude";
-    String TAG_LONG = "longitude";
     String TAG_DESKRIPSI = "deskripsi";
     String TAG_ALAMAT = "alamat";
     String TAG_TELP = "telp";
@@ -72,10 +73,11 @@ public class RestaurantActivity extends AppCompatActivity {
         restoAlamat = (TextView)findViewById(R.id.isiAlamat);
         restoEmail = (TextView)findViewById(R.id.isiEmail);
         restoPhone = (TextView)findViewById(R.id.isiTelp);
+        restoDeskripsi = (TextView)findViewById(R.id.isiDeskripsi);
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new GridLayoutManager(getApplicationContext(),2,GridLayoutManager.VERTICAL, false);
-
         recyclerView.setLayoutManager(layoutManager);
 
         viewInformation();
@@ -100,6 +102,7 @@ public class RestaurantActivity extends AppCompatActivity {
             restoEmail.setText(email);
             restoAlamat.setText(alamat);
             restoPhone.setText(telp);
+            restoDeskripsi.setText(deskripsi);
             Picasso.with(RestaurantActivity.this).load(image).into(restoCover);
         }
         LoadData loadData= new LoadData();
@@ -167,5 +170,8 @@ public class RestaurantActivity extends AppCompatActivity {
         }
 
     }
+
+
+
 
 }

@@ -20,6 +20,10 @@ import id.ac.unj.gohalal.MainActivity;
 import id.ac.unj.gohalal.R;
 import id.ac.unj.gohalal.Helper.Utils;
 
+/**
+ * Created by SuperNova's on 25/05/2017.
+ */
+
 public class ForgotPassword_Fragment extends Fragment implements
 		OnClickListener {
 	private static View view;

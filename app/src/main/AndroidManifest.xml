@@ -39,7 +39,8 @@
             android:noHistory="true" />
         <activity android:name=".MapsActivity" />
         <activity android:name=".RestaurantActivity" />
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".MenuActivity"></activity>
     </application>
 
 </manifest>

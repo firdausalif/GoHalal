@@ -28,7 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by anupamchugh on 29/08/16.
+ * Created by SuperNova's on 25/05/2017.
  */
 public class JSONParser {
 

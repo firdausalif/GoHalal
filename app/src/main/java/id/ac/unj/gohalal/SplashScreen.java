@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
-
+/**
+ * Created by SuperNova's on 25/05/2017.
+ */
 
 public class SplashScreen extends AppCompatActivity {
     @Override

@@ -32,6 +32,7 @@
     <string name="restoName">Restaurant Name: </string>
     <string name="alamat">Address: </string>
     <string name="telp">Phone: </string>
+    <string name="deskripsi">Deskripsi: </string>
     <string name="restoEmail">Email: </string>
 
     <!-- TODO: Remove or change this placeholder text -->

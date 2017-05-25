@@ -17,7 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +50,10 @@ import java.util.Locale;
 
 import id.ac.unj.gohalal.SetterGetter.Restaurant;
 import id.ac.unj.gohalal.Helper.JSONParser;
+
+/**
+ * Created by SuperNova's on 25/05/2017.
+ */
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -86,9 +89,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     String TAG_EMAIL = "email";
     String TAG_IMAGE = "image";
     String TAG_RATE = "rate";
-    String TAG_MENU = "menu";
-    String TAG_PRICE = "price";
-    String TAG_IDRESTO = "idresto";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

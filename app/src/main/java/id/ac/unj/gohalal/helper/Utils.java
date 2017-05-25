@@ -1,5 +1,9 @@
 package id.ac.unj.gohalal.Helper;
 
+/**
+ * Created by SuperNova's on 25/05/2017.
+ */
+
 public class Utils {
 	
 	//Email Validation pattern

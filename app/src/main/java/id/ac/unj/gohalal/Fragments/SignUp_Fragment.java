@@ -33,6 +33,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Created by SuperNova's on 25/05/2017.
+ */
+
 public class SignUp_Fragment extends Fragment implements OnClickListener {
 	String URL= "http://gohalal.pe.hu/testv2/index.php/Register";
 	JSONParser jsonParser=new JSONParser();

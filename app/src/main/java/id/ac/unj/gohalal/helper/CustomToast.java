@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Created by SuperNova's on 25/05/2017.
+ */
+
 public class CustomToast {
 
 	// Custom Toast Method
