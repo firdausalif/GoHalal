@@ -48,7 +48,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         MenuItem list =  menus.get(position);
         holder.menuNama.setText(String.valueOf(list.getNama()));
-        holder.menuHarga.setText(String.valueOf(list.getPrice()));
+        holder.menuHarga.setText("Rp. " + String.valueOf(list.getPrice()));
         holder.ratingMenu.setRating(list.getRate());
     }
 

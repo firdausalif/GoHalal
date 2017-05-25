@@ -1,5 +1,6 @@
 package id.ac.unj.gohalal;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public class RestaurantActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private MenuAdapter adapter;
     JSONParser jParser = new JSONParser();
+    ProgressDialog pDialog;
 
     String MENU_URL= "http://gohalal.pe.hu/testv2/index.php/Restomenu";
 
@@ -96,6 +98,11 @@ public class RestaurantActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            pDialog = new ProgressDialog(RestaurantActivity.this);
+            pDialog.setMessage("Please Wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
         }
 
         @Override
@@ -111,29 +118,34 @@ public class RestaurantActivity extends AppCompatActivity {
 
         protected void onPostExecute(JSONObject result) {
             try{
-                JSONArray array = result.getJSONArray(TAG_MENU);
 
-                String [] nama = new String[array.length()];
-                String [] deskripsi = new String[array.length()];
-                int [] price = new int[array.length()];
-                int [] rate = new int[array.length()];
-                int [] idresto = new int[array.length()];
+                if(result != null){
+                    JSONArray array = result.getJSONArray(TAG_MENU);
 
-                if(array != null || !array.equals("")){
-                    for(int i = 0; i < array.length(); i++) {
-                        nama[i] = array.getJSONObject(i).getString(TAG_NAMA);
-                        deskripsi[i] = array.getJSONObject(i).getString(TAG_DESKRIPSI);
-                        price[i] = array.getJSONObject(i).getInt(TAG_PRICE);
-                        rate[i] = array.getJSONObject(i).getInt(TAG_RATE);
-                        idresto[i]  = array.getJSONObject(i).getInt(TAG_IDRESTO);
+                    String [] nama = new String[array.length()];
+                    String [] deskripsi = new String[array.length()];
+                    int [] price = new int[array.length()];
+                    int [] rate = new int[array.length()];
+                    int [] idresto = new int[array.length()];
 
-                        adapter = new MenuAdapter(nama,deskripsi,idresto,rate,price);
-                        recyclerView.setAdapter(adapter);
+                    if(array != null || !array.equals("")){
+                        for(int i = 0; i < array.length(); i++) {
+                            nama[i] = array.getJSONObject(i).getString(TAG_NAMA);
+                            deskripsi[i] = array.getJSONObject(i).getString(TAG_DESKRIPSI);
+                            price[i] = array.getJSONObject(i).getInt(TAG_PRICE);
+                            rate[i] = array.getJSONObject(i).getInt(TAG_RATE);
+                            idresto[i]  = array.getJSONObject(i).getInt(TAG_IDRESTO);
+
+                            adapter = new MenuAdapter(nama,deskripsi,idresto,rate,price);
+                            pDialog.dismiss();
+                            recyclerView.setAdapter(adapter);
+                        }
                     }
                 }else {
-                    Toast.makeText(getApplicationContext(),"Cannot get data",Toast.LENGTH_LONG)
+                    Toast.makeText(getApplicationContext(),"Restaurant doesn't have menu yet...",Toast.LENGTH_LONG)
                             .show();
                 }
+
             }catch (JSONException e){
                 e.printStackTrace();
             }
