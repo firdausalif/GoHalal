@@ -9,8 +9,16 @@ import android.graphics.Bitmap;
 
 public class MenuItem {
     private String nama,deskripsi,image;
-    private Integer idresto,rate,price;
+    private Integer idresto,rate,price,id;
     Context context;
+
+    public int getId(){
+        return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
 
     public String getNama() {
         return nama;

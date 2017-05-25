@@ -36,13 +36,17 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     String TAG_IMAGE = "image";
     String TAG_RATE = "rate";
     String TAG_PRICE = "price";
+    String TAG_USRID = "userid";
+    String TAG_RESTOID = "restoid";
+    String TAG_MENUID = "menuid";
 
-    public MenuAdapter(String[] nama, String[] deskripsi, String[] images, int[]idresto, int[]rate,
-                       int[]price, Context context){
+    public MenuAdapter(int[]id, String[] nama, String[] deskripsi, String[] images, int[]idresto,
+                       int[]rate, int[]price, Context context){
         super();
         menus = new ArrayList<MenuItem>();
         for(int i =0; i<nama.length; i++){
             MenuItem menu = new MenuItem();
+            menu.setId(id[i]);
             menu.setNama(nama[i]);
             menu.setDeskripsi(deskripsi[i]);
             menu.setIdresto(idresto[i]);
@@ -75,6 +79,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MenuActivity.class);
+                intent.putExtra(TAG_MENUID, list.getId());
+                intent.putExtra(TAG_RESTOID, list.getIdresto());
                 intent.putExtra(TAG_NAMA, list.getNama());
                 intent.putExtra(TAG_IMAGE, list.getImage());
                 intent.putExtra(TAG_PRICE, list.getPrice());

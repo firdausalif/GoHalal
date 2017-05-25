@@ -90,7 +90,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
     public void viewInformation(){
         Intent intent = getIntent();
-        final String id = intent.getExtras().getString(TAG_ID);
+        final String restoid = intent.getExtras().getString(TAG_ID);
         final String nama = intent.getExtras().getString(TAG_NAMA);
         final String alamat = intent.getExtras().getString(TAG_ALAMAT);
         final String deskripsi = intent.getExtras().getString(TAG_DESKRIPSI);
@@ -109,8 +109,9 @@ public class RestaurantActivity extends AppCompatActivity {
             restoDeskripsi.setText(deskripsi);
             Picasso.with(RestaurantActivity.this).load(image).into(restoCover);
         }
+
         LoadData loadData= new LoadData();
-        loadData.execute(id);
+        loadData.execute(restoid);
     }
 
     class LoadData extends AsyncTask<String, String, JSONObject> {
@@ -147,9 +148,11 @@ public class RestaurantActivity extends AppCompatActivity {
                     int[] price = new int[array.length()];
                     int[] rate = new int[array.length()];
                     int[] idresto = new int[array.length()];
+                    int[] idmenu = new int[array.length()];
 
                     if(array != null || !array.equals("")){
                         for(int i = 0; i < array.length(); i++) {
+                            idmenu[i] = array.getJSONObject(i).getInt(TAG_ID);
                             nama[i] = array.getJSONObject(i).getString(TAG_NAMA);
                             deskripsi[i] = array.getJSONObject(i).getString(TAG_DESKRIPSI);
                             price[i] = array.getJSONObject(i).getInt(TAG_PRICE);
@@ -157,7 +160,7 @@ public class RestaurantActivity extends AppCompatActivity {
                             images[i] = array.getJSONObject(i).getString(TAG_IMAGE);
                             idresto[i]  = array.getJSONObject(i).getInt(TAG_IDRESTO);
 
-                            adapter = new MenuAdapter(nama,deskripsi,images, idresto,rate,price,
+                            adapter = new MenuAdapter(idmenu, nama,deskripsi,images, idresto,rate,price,
                                     RestaurantActivity.this);
                             recyclerView.setAdapter(adapter);
                             pDialog.dismiss();
