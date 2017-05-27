@@ -33,7 +33,7 @@ import id.ac.unj.gohalal.SetterGetter.Review;
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
     List<Review> reviews;
     Context context;
-
+    String MyPref = "gohalal";
     public ReviewAdapter(int[]id,  int[]idmenu, int[]rate, String[]namauser,
                          String[] namamenu, String[] review, String[] dateReview,
                                  Context context) {
@@ -42,15 +42,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         reviews = new ArrayList<Review>();
         for (int i = 0; i < id.length; i++) {
             Review rvw = new Review();
-            rvw.setId(id[i]);
-            rvw.setIdmenu(idmenu[i]);
-            rvw.setRate(rate[i]);
-            rvw.setNamauser(namauser[i]);
-            rvw.setNamamenu(namamenu[i]);
-            rvw.setReview(review[i]);
-            rvw.setContext(context);
-            rvw.setCreated(dateReview[i]);
-            reviews.add(rvw);
+                rvw.setId(id[i]);
+                rvw.setIdmenu(idmenu[i]);
+                rvw.setRate(rate[i]);
+                rvw.setNamauser(namauser[i]);
+                rvw.setNamamenu(namamenu[i]);
+                rvw.setReview(review[i]);
+                rvw.setContext(context);
+                rvw.setCreated(dateReview[i]);
+                reviews.add(rvw);
+
+
         }
     }
 
@@ -71,6 +73,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         holder.reviewText.setText(String.valueOf(list.getReview()));
         holder.userReviewRating.setRating(list.getRate());
         holder.userTimePost.setText(diff);
+
+
+
+
 
     }
 

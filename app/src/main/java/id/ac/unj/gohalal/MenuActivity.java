@@ -42,7 +42,7 @@ public class MenuActivity extends AppCompatActivity {
     String TAG_RATE = "rate";
     String TAG_PRICE = "price";
     String TAG_ID = "id";
-    String TAG_USRID = "userid";
+    String TAG_DATA = "data";
     String TAG_RESTOID = "restoid";
     String TAG_MENUID = "menuid";
     String TAG_USERNAMA = "username";
@@ -80,7 +80,7 @@ public class MenuActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL , true);
         recyclerView.setLayoutManager(layoutManager);
 
         sharedPreferences = getSharedPreferences(MyPref, Context.MODE_PRIVATE);
@@ -98,7 +98,7 @@ public class MenuActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int resto_id = intent.getExtras().getInt(TAG_RESTOID);
         String nama_menu = intent.getExtras().getString(TAG_NAMA);
-        String menu_id = intent.getExtras().getString(TAG_MENUID);
+        int menuid = intent.getExtras().getInt(TAG_MENUID);
         String image = intent.getExtras().getString(TAG_IMAGE);
         int price = intent.getExtras().getInt(TAG_PRICE);
         int rate = intent.getExtras().getInt(TAG_RATE);
@@ -110,7 +110,8 @@ public class MenuActivity extends AppCompatActivity {
             menuRate.setRating(rate);
         }
 
-       GetReview getReview = new GetReview();getReview.execute(menu_id);
+       GetReview getReview = new GetReview();
+       getReview.execute(Integer.toString(menuid));
     }
 
     class GetReview extends AsyncTask<String, String, JSONObject> {
@@ -131,14 +132,14 @@ public class MenuActivity extends AppCompatActivity {
             ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("menuid", menuid));
 
-            JSONObject json = jParser.makeHttpRequest(REVIEW_URL  + menuid, "GET", params);
+            JSONObject json = jParser.makeHttpRequest(REVIEW_URL + "?menuid=" + menuid ,"GET", params);
             return json;
         }
 
         protected void onPostExecute(JSONObject result) {
             try{
                 if(result != null){
-                    JSONArray array = result.getJSONArray(TAG_REVIEW);
+                    JSONArray array = result.getJSONArray(TAG_DATA);
 
                     String[] username = new String[array.length()];
                     String[] menuname = new String[array.length()];
@@ -150,6 +151,7 @@ public class MenuActivity extends AppCompatActivity {
 
                     if(array != null || !array.equals("")){
                         for(int i = 0; i < array.length(); i++) {
+
                             idmenu[i] = array.getJSONObject(i).getInt(TAG_MENUID);
                             idreview[i] = array.getJSONObject(i).getInt(TAG_ID);
                             rate[i] = array.getJSONObject(i).getInt(TAG_RATE);
@@ -158,13 +160,14 @@ public class MenuActivity extends AppCompatActivity {
                             review[i] = array.getJSONObject(i).getString(TAG_REVIEW);
                             dateReview[i] = array.getJSONObject(i).getString(TAG_CREATED);
 
-                            adapter = new ReviewAdapter(idreview, idmenu, rate, username,
-                                    menuname, review, dateReview, MenuActivity.this);
-                            recyclerView.setAdapter(adapter);
                             pDialog.dismiss();
+                            adapter = new ReviewAdapter(idreview, idmenu, rate, username,
+                                        menuname, review, dateReview, MenuActivity.this);
+                            recyclerView.setAdapter(adapter);
                         }
                     }
                 }else {
+                    pDialog.dismiss();
                     Toast.makeText(getApplicationContext(),"No one reviewed this menu...",
                             Toast.LENGTH_LONG)
                             .show();
@@ -217,9 +220,11 @@ public class MenuActivity extends AppCompatActivity {
                 if(result != null){
                     int resultjson = result.getInt("success");
                     if (resultjson == 1){
+                        pDialog.dismiss();
                         GetReview getReview = new GetReview();
                         getReview.execute(menu_id);
                     }else{
+                        pDialog.dismiss();
                         Toast.makeText(MenuActivity.this, "Failed to post review try again",
                                 Toast.LENGTH_LONG).show();
                     }
@@ -232,7 +237,6 @@ public class MenuActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void checkValidation(){
@@ -241,18 +245,19 @@ public class MenuActivity extends AppCompatActivity {
         String getCreated = df.format(cal.getTime());
 
         Intent intent = getIntent();
-        String getMenuId = intent.getExtras().getString(TAG_MENUID);
-        String getRate = Float.toString(reviewRate.getRating());
+        int getMenuId = intent.getExtras().getInt(TAG_MENUID);
+        float getRate = reviewRate.getRating();
         String getUserName = sharedPreferences.getString("username", "default");
-        String getMenuName = intent.getExtras().getString(TAG_MENUNAMA);
+        String getMenuName = intent.getExtras().getString("nama");
         String getReview = userReview.getText().toString();
 
-        if(getRate.equals("") && getReview.equals("")){
+        if(getRate == 0 || getReview.equals("") || getReview.equals("0")){
             Toast.makeText(getApplicationContext(), "All input needed (Star and Review)",
                     Toast.LENGTH_LONG).show();
         }else{
             PostReview postReview = new PostReview();
-            postReview.execute(getMenuId,getRate,getUserName,getMenuName,getReview,getCreated);
+            postReview.execute(Integer.toString(getMenuId),Float.toString(getRate),getUserName,
+                    getMenuName,getReview,getCreated);
         }
 
     }

@@ -81,6 +81,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
                 Intent intent = new Intent(context, MenuActivity.class);
                 SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putInt(TAG_MENUID, list.getId());
+                editor.commit();
 
                 intent.putExtra(TAG_MENUID, list.getId());
                 intent.putExtra(TAG_RESTOID, list.getIdresto());

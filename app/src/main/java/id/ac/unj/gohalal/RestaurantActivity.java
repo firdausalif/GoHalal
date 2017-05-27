@@ -129,13 +129,12 @@ public class RestaurantActivity extends AppCompatActivity {
             ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("idresto", idresto));
 
-            JSONObject json = jParser.makeHttpRequest(MENU_URL, "GET", params);
+            JSONObject json = jParser.makeHttpRequest(MENU_URL+ "?idresto=" + idresto, "GET", params);
             return json;
         }
 
         protected void onPostExecute(JSONObject result) {
             try{
-
                 if(result != null){
                     JSONArray array = result.getJSONArray(TAG_MENU);
 
@@ -157,13 +156,14 @@ public class RestaurantActivity extends AppCompatActivity {
                             images[i] = array.getJSONObject(i).getString(TAG_IMAGE);
                             idresto[i]  = array.getJSONObject(i).getInt(TAG_IDRESTO);
 
+                            pDialog.dismiss();
                             adapter = new MenuAdapter(idmenu, nama,deskripsi,images, idresto,rate,price,
                                     RestaurantActivity.this);
                             recyclerView.setAdapter(adapter);
-                            pDialog.dismiss();
                         }
                     }
                 }else {
+                    pDialog.dismiss();
                     Toast.makeText(getApplicationContext(),"Restaurant doesn't have menu yet...",Toast.LENGTH_LONG)
                             .show();
                 }
