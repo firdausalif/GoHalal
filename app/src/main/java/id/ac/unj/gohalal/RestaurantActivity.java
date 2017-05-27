@@ -49,9 +49,7 @@ public class RestaurantActivity extends AppCompatActivity {
     JSONParser jParser = new JSONParser();
     ProgressDialog pDialog;
 
-    String MENU_URL= "http://gohalal.pe.hu/testv2/index.php/Restomenu";
-    private static ArrayList<MenuItem> menuList;
-
+    String MENU_URL= "http://gohalal.pe.hu/testv2/index.php/Menu";
     TextView restoName, restoAlamat, restoPhone, restoEmail, restoDeskripsi;
     ImageView restoCover;
     String TAG_MENU = "menu";
@@ -113,6 +111,7 @@ public class RestaurantActivity extends AppCompatActivity {
     }
 
     class LoadData extends AsyncTask<String, String, JSONObject> {
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -130,7 +129,7 @@ public class RestaurantActivity extends AppCompatActivity {
             ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("idresto", idresto));
 
-            JSONObject json = jParser.makeHttpRequest(MENU_URL, "POST", params);
+            JSONObject json = jParser.makeHttpRequest(MENU_URL, "GET", params);
             return json;
         }
 
@@ -168,7 +167,6 @@ public class RestaurantActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Restaurant doesn't have menu yet...",Toast.LENGTH_LONG)
                             .show();
                 }
-
             }catch (JSONException e){
                 e.printStackTrace();
             }

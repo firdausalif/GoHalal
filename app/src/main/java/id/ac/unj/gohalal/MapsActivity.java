@@ -265,14 +265,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // TODO Auto-generated catch block
             e.printStackTrace();
             currLoc.setText("Canont get Address!");
-            int count=0;
-            if(count == 3) {
-                Toast.makeText(getApplicationContext(),"Reboot ur phone if it still not appear",
+            Toast.makeText(getApplicationContext(),"Reboot ur phone if it still not appear",
                         Toast.LENGTH_LONG).show();
-            }
+
         }
+
         //Place current location marker
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng latLng = new LatLng(getLatitude, getLongitude);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Position");

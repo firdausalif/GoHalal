@@ -34,6 +34,7 @@
     <string name="telp">Phone: </string>
     <string name="deskripsi">Deskripsi: </string>
     <string name="restoEmail">Email: </string>
+    <string name="addReview">Add Review </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

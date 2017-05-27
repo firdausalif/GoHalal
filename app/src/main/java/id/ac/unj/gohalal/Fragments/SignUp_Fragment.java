@@ -113,51 +113,39 @@ public class SignUp_Fragment extends Fragment implements OnClickListener {
 
 	}
 
-	// Check Validation Method
 	private void checkValidation() {
 
-		// Get all edittext texts
 		String getUserName = username.getText().toString();
 		String getEmailId = emailId.getText().toString();
 		String getMobileNumber = mobileNumber.getText().toString();
 		String getPassword = password.getText().toString();
 		String getConfirmPassword = confirmPassword.getText().toString();
 
-		// Pattern match for email id
 		Pattern p = Pattern.compile(Utils.regEx);
 		Matcher m = p.matcher(getEmailId);
 
-		// Check if all strings are null or not
 		if (getUserName.equals("") || getUserName.length() == 0
 				|| getEmailId.equals("") || getEmailId.length() == 0
 				|| getMobileNumber.equals("") || getMobileNumber.length() == 0
 				|| getPassword.equals("") || getPassword.length() == 0
 				|| getConfirmPassword.equals("")
 				|| getConfirmPassword.length() == 0) {
-
 			signupLayout.startAnimation(shakeAnimation);
 			new CustomToast().Show_Toast(getActivity(), view,
 					"All fields are required.");
-		}
-		// Check if email id valid or not
-		else if
-			(!m.find()) {
+		}else if (!m.find()) {
 			new CustomToast().Show_Toast(getActivity(), view,
 					"Your Email Id is Invalid.");
-		}
-		// Check if both password should be equal
-		else if
-			(!getConfirmPassword.equals(getPassword)) {
+		}else if (!getConfirmPassword.equals(getPassword)) {
 			new CustomToast().Show_Toast(getActivity(), view,
 					"Both password doesn't match.");
-		}
-		// Make sure user should check Terms and Conditions checkbox
-		else if (!terms_conditions.isChecked()) {
+		}else if (!terms_conditions.isChecked()) {
 			new CustomToast().Show_Toast(getActivity(), view,
 					"Please select Terms and Conditions.");
-		}
-		// Else do signup or do your stuff
-		else {
+		}else if(getUserName.length() < 5 || getPassword.length() < 6){
+			new CustomToast().Show_Toast(getActivity(), view,
+					"Username/Password min 6 characters");
+		}else {
             AttemptRegister attempRegister= new AttemptRegister();
             attempRegister.execute(getUserName, getEmailId, getPassword, getMobileNumber);
 		}
@@ -207,15 +195,11 @@ public class SignUp_Fragment extends Fragment implements OnClickListener {
 						new CustomToast().Show_Toast(getActivity(), view,
 								result.getString("msg"));
 					}
-
 				}else{
 					pDialog.dismiss();
 					new CustomToast().Show_Toast(getActivity(), view,
 							"Cant register, try again!!");
 				}
-
-
-
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

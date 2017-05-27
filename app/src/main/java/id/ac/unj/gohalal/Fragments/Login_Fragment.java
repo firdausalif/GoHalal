@@ -8,7 +8,9 @@ import id.ac.unj.gohalal.R;
 import id.ac.unj.gohalal.Helper.Utils;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.os.AsyncTask;
@@ -49,6 +51,7 @@ public class Login_Fragment extends Fragment implements OnClickListener {
 	String URL= "http://gohalal.pe.hu/testv2/index.php/Login";
 	JSONParser jsonParser =new JSONParser();
 	ProgressDialog pDialog;
+	SharedPreferences sharedpreferences;
 
 	private static EditText username, password;
 	private static Button loginButton;
@@ -57,7 +60,9 @@ public class Login_Fragment extends Fragment implements OnClickListener {
 	private static LinearLayout loginLayout;
 	private static Animation shakeAnimation;
 	private static FragmentManager fragmentManager;
+	public static final String MyPref = "gohalal" ;
 
+	public String TAG_USERNAME = "username";
 	public Login_Fragment() {
 
 	}
@@ -68,6 +73,8 @@ public class Login_Fragment extends Fragment implements OnClickListener {
 		view = inflater.inflate(R.layout.login_layout, container, false);
 		initViews();
 		setListeners();
+		sharedpreferences = getContext().getSharedPreferences(MyPref, Context.MODE_PRIVATE);
+
 		return view;
 
 	}
@@ -184,13 +191,14 @@ public class Login_Fragment extends Fragment implements OnClickListener {
 			loginLayout.startAnimation(shakeAnimation);
 			new CustomToast().Show_Toast(getActivity(), view,
 					"Enter your credentials.");
-		}
-		//do Login
-		else{
+		}else if (getUserName.length() < 6 || getPassword.length() < 6){
+			loginLayout.startAnimation(shakeAnimation);
+			new CustomToast().Show_Toast(getActivity(), view,
+					"Username/Password min 6 characters");
+		}else{
 			AttemptLogin attemptLogin= new AttemptLogin();
 			attemptLogin.execute(getUserName, getPassword)	;
 		}
-
 	}
 
 	private class AttemptLogin extends AsyncTask<String, String, JSONObject> {
@@ -226,10 +234,15 @@ public class Login_Fragment extends Fragment implements OnClickListener {
 			try {
 				if(result != null){
 					int resultjson = result.getInt("success");
+
 					if (resultjson == 1) {
-						pDialog.dismiss();
+						String username = result.getString("username");
+						SharedPreferences.Editor editor = sharedpreferences.edit();
+						editor.putString(TAG_USERNAME, username);
+						editor.commit();
 						Toast.makeText(getActivity(), result.getString("msg"),Toast.LENGTH_LONG).show();
 						Intent intent = new Intent(getActivity(), MapsActivity.class);
+						pDialog.dismiss();
 						startActivity(intent);
 					} else {
 						pDialog.dismiss();
