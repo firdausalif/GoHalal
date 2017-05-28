@@ -38,7 +38,7 @@ import org.json.JSONObject;
  */
 
 public class SignUp_Fragment extends Fragment implements OnClickListener {
-	String URL= "http://gohalal.pe.hu/testv2/index.php/Register";
+	String URL= "http://gohalal.pe.hu/GoHalal/index.php/Register";
 	JSONParser jsonParser=new JSONParser();
 
 	private static View view;

@@ -51,7 +51,7 @@ public class MenuActivity extends AppCompatActivity {
     String TAG_CREATED = "created";
     public static final String MyPref = "gohalal" ;
 
-    public static String REVIEW_URL= "http://gohalal.pe.hu/testv2/index.php/Review" ;
+    public static String REVIEW_URL= "http://gohalal.pe.hu/GoHalal/index.php/Review" ;
 
     JSONParser jParser = new JSONParser();
     ReviewAdapter adapter;
@@ -96,7 +96,6 @@ public class MenuActivity extends AppCompatActivity {
 
     public void loadMenu(){
         Intent intent = getIntent();
-        int resto_id = intent.getExtras().getInt(TAG_RESTOID);
         String nama_menu = intent.getExtras().getString(TAG_NAMA);
         int menuid = intent.getExtras().getInt(TAG_MENUID);
         String image = intent.getExtras().getString(TAG_IMAGE);
@@ -159,12 +158,12 @@ public class MenuActivity extends AppCompatActivity {
                             menuname[i] = array.getJSONObject(i).getString(TAG_MENUNAMA);
                             review[i] = array.getJSONObject(i).getString(TAG_REVIEW);
                             dateReview[i] = array.getJSONObject(i).getString(TAG_CREATED);
-
-                            pDialog.dismiss();
-                            adapter = new ReviewAdapter(idreview, idmenu, rate, username,
-                                        menuname, review, dateReview, MenuActivity.this);
-                            recyclerView.setAdapter(adapter);
                         }
+
+                        pDialog.dismiss();
+                        adapter = new ReviewAdapter(idreview, idmenu, rate, username,
+                                menuname, review, dateReview, MenuActivity.this);
+                        recyclerView.setAdapter(adapter);
                     }
                 }else {
                     pDialog.dismiss();
@@ -216,13 +215,13 @@ public class MenuActivity extends AppCompatActivity {
         protected void onPostExecute(JSONObject result) {
             try {
                 Intent intent = getIntent();
-                String menu_id = intent.getExtras().getString(TAG_MENUID);
+                int menu_id = intent.getExtras().getInt(TAG_MENUID);
                 if(result != null){
                     int resultjson = result.getInt("success");
                     if (resultjson == 1){
                         pDialog.dismiss();
                         GetReview getReview = new GetReview();
-                        getReview.execute(menu_id);
+                        getReview.execute(Integer.toString(menu_id));
                     }else{
                         pDialog.dismiss();
                         Toast.makeText(MenuActivity.this, "Failed to post review try again",

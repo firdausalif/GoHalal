@@ -60,7 +60,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    String RESTAURANT_URL= "http://gohalal.pe.hu/testv2/index.php/Restaurant";
+    String RESTAURANT_URL= "http://gohalal.pe.hu/GoHalal/index.php/Restaurant";
 
     ArrayList<HashMap<String, String>> dataMap = new ArrayList<HashMap<String, String>>();
     JSONParser jParser = new JSONParser();

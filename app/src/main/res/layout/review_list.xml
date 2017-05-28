@@ -77,9 +77,9 @@
                 android:id="@+id/userReviewRating"
                 android:padding="7dp"
                 style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
+                android:layout_width="95dp"
                 android:layout_height="wrap_content"
-                android:numStars="6"
+                android:numStars="5"
                 android:isIndicator="true" />
 
         </LinearLayout>

@@ -48,7 +48,7 @@ import org.json.JSONObject;
 public class Login_Fragment extends Fragment implements OnClickListener {
 	private static View view;
 
-	String URL= "http://gohalal.pe.hu/testv2/index.php/Login";
+	String URL= "http://gohalal.pe.hu/GoHalal/index.php/Login";
 	JSONParser jsonParser =new JSONParser();
 	ProgressDialog pDialog;
 	SharedPreferences sharedpreferences;

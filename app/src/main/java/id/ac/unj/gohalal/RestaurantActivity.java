@@ -49,7 +49,7 @@ public class RestaurantActivity extends AppCompatActivity {
     JSONParser jParser = new JSONParser();
     ProgressDialog pDialog;
 
-    String MENU_URL= "http://gohalal.pe.hu/testv2/index.php/Menu";
+    String MENU_URL= "http://gohalal.pe.hu/GoHalal/index.php/Menu";
     TextView restoName, restoAlamat, restoPhone, restoEmail, restoDeskripsi;
     ImageView restoCover;
     String TAG_MENU = "menu";
@@ -174,8 +174,5 @@ public class RestaurantActivity extends AppCompatActivity {
         }
 
     }
-
-
-
 
 }
