@@ -26,4 +26,9 @@
     <dimen name="text_size">18sp</dimen>
     <dimen name="activity_right_margin">10dp</dimen>
     <dimen name="activity_left_margin">10dp</dimen>
+    <dimen name="toolbar_height2">64dp</dimen>
+    <dimen name="key_line_8">8dp</dimen>
+    <dimen name="key_line_16">16dp</dimen>
+    <dimen name="fab">56dp</dimen>
+    <dimen name="nav_header_height">192dp</dimen>
 </resources>

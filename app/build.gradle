@@ -36,5 +36,6 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.sothree.slidinguppanel:library:3.3.1'
+    compile 'com.akexorcist:googledirectionlibrary:1.0.4'
     testCompile 'junit:junit:4.12'
 }

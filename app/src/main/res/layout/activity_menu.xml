@@ -47,6 +47,7 @@
                         android:textSize="@dimen/text_size"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold" />
+
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>

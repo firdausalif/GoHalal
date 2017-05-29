@@ -32,16 +32,24 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left|bottom"
                             android:background="@android:drawable/screen_background_dark_transparent"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/restoName"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="150dp"
                                     android:layout_height="wrap_content"
                                     android:padding="16dp"
                                     android:textSize="@dimen/text_size"
                                     android:textColor="#FFFFFF"
                                     android:textStyle="bold" />
+
+                                <ImageView
+                                    android:id="@+id/route"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginLeft="150dp"
+                                    android:layout_marginTop="10dp"
+                                    android:src="@drawable/locmarker" />
                         </LinearLayout>
                 </FrameLayout>
 

@@ -1,17 +1,12 @@
 package id.ac.unj.gohalal;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.sax.StartElementListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
@@ -25,17 +20,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import id.ac.unj.gohalal.Adapter.MenuAdapter;
 import id.ac.unj.gohalal.Helper.JSONParser;
-import id.ac.unj.gohalal.SetterGetter.MenuItem;
-import id.ac.unj.gohalal.SetterGetter.Restaurant;
 
 /**
  * Created by SuperNova's on 25/05/2017.
@@ -52,6 +40,7 @@ public class RestaurantActivity extends AppCompatActivity {
     String MENU_URL= "http://gohalal.pe.hu/GoHalal/index.php/Menu";
     TextView restoName, restoAlamat, restoPhone, restoEmail, restoDeskripsi;
     ImageView restoCover;
+    ImageView route;
     String TAG_MENU = "menu";
     String TAG_ID = "id";
     String TAG_IDRESTO = "idresto";
@@ -75,6 +64,7 @@ public class RestaurantActivity extends AppCompatActivity {
         restoAlamat = (TextView)findViewById(R.id.isiAlamat);
         restoEmail = (TextView)findViewById(R.id.isiEmail);
         restoPhone = (TextView)findViewById(R.id.isiTelp);
+        route = (ImageView)findViewById(R.id.route);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -83,6 +73,15 @@ public class RestaurantActivity extends AppCompatActivity {
 
         viewInformation();
 
+        route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("onClick", true);
+                startActivity(intent);
+
+            }
+        });
     }
 
     public void viewInformation(){
@@ -174,5 +173,6 @@ public class RestaurantActivity extends AppCompatActivity {
         }
 
     }
+
 
 }

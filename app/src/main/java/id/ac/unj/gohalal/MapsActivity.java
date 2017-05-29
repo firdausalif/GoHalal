@@ -2,8 +2,11 @@ package id.ac.unj.gohalal;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -18,12 +22,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.akexorcist.googledirection.model.Route;
+import com.akexorcist.googledirection.model.Step;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -43,24 +50,39 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import id.ac.unj.gohalal.SetterGetter.Maps;
 import id.ac.unj.gohalal.SetterGetter.Restaurant;
 import id.ac.unj.gohalal.Helper.JSONParser;
+
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.util.DirectionConverter;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 /**
  * Created by SuperNova's on 25/05/2017.
  */
 
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        DirectionCallback{
 
     String RESTAURANT_URL= "http://gohalal.pe.hu/GoHalal/index.php/Restaurant";
+    String API_KEY = "AIzaSyBZPsrDp_tECyvlXg0jTcQsyetkfFrNNmU";
 
     ArrayList<HashMap<String, String>> dataMap = new ArrayList<HashMap<String, String>>();
     JSONParser jParser = new JSONParser();
@@ -76,7 +98,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Toolbar toolbar;
     FloatingActionButton descButton;
     ProgressDialog pDialog;
+    SharedPreferences sharedPreferences;
 
+    private String[] colors = {"#7fff7272", "#7f31c7c5", "#7fff8a00"};
     String TAG_RESTO = "restaurant";
     String TAG_ID = "id";
     String TAG_NAMA = "nama";
@@ -89,6 +113,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     String TAG_EMAIL = "email";
     String TAG_IMAGE = "image";
     String TAG_RATE = "rate";
+    String MyPref = "gohalal";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +134,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        sharedPreferences = getSharedPreferences(MyPref, Context.MODE_PRIVATE);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -121,6 +148,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 buildGoogleApiClient();
             }
         });
+
+
+
     }
 
     public void initNavigationDrawer() {
@@ -151,9 +181,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return true;
             }
         });
+
+        String getUserName = sharedPreferences.getString("username", "default");
+
         View header = navigationView.getHeaderView(0);
-        TextView tv_email = (TextView)header.findViewById(R.id.tv_email);
-        tv_email.setText("admin@gohalal.pe.hu");
+        TextView tv_username = (TextView)header.findViewById(R.id.userName);
+        tv_username.setText(getUserName);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close){
@@ -204,6 +237,43 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         else {
             buildGoogleApiClient();
         }
+
+        if(mMap != null){
+            Intent intent = getIntent();
+            boolean onClick = intent.getExtras().getBoolean("onClick");
+            if (onClick) {
+
+                double curPosLat = Double.parseDouble(sharedPreferences.getString("currPosLat", ""));
+                double curPosLong = Double.parseDouble(sharedPreferences.getString("currPosLong", ""));
+                LatLng currentPos = new LatLng(curPosLat,curPosLong);
+
+                double curShopLat = Double.parseDouble(sharedPreferences.getString("shopPosLat", ""));
+                double curShopLong = Double.parseDouble(sharedPreferences.getString("currPosLong", ""));
+                LatLng shopPos = new LatLng(curShopLat,curShopLong);
+
+
+                if (currentPos == null || currentPos.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Cant get CurrentPos", Toast.LENGTH_LONG).show();
+                } else if (shopPos == null || shopPos.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Cant get ShopPos", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Direction Requesting...", Toast.LENGTH_SHORT).show();
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                        GoogleDirection.withServerKey(API_KEY)
+                                .from(currentPos)
+                                .to(shopPos)
+                                .transportMode(TransportMode.DRIVING)
+                                .execute(this);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+
+                }
+                onClick = false;
+            }
+        }
+
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -278,9 +348,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("currPosLat", getLatitude.toString());
+        editor.putString("currPosLong", getLongitude.toString());
+        editor.commit();
+
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
 
         //stop location updates
         if (mGoogleApiClient != null) {
@@ -321,7 +396,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public boolean onMarkerClick(Marker marker) {
-
         for(int i = 0; i < dataMap.size(); i++) {
             String id = dataMap.get(i).get(TAG_ID);
             String nama = dataMap.get(i).get(TAG_NAMA);
@@ -331,6 +405,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             String telp = dataMap.get(i).get(TAG_TELP);
             String email = dataMap.get(i).get(TAG_EMAIL);
             String rate = dataMap.get(i).get(TAG_RATE);
+            String latitude = dataMap.get(i).get(TAG_LAT);
+            String longitude = dataMap.get(i).get(TAG_LONG);
 
             if(marker.getTitle().equalsIgnoreCase(nama)){
                 Intent in = new Intent(getApplicationContext(),RestaurantActivity.class);
@@ -342,9 +418,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 in.putExtra(TAG_TELP, telp);
                 in.putExtra(TAG_EMAIL,email);
                 in.putExtra(TAG_RATE, rate);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putString("shopPosLat", latitude);
+                editor.putString("shopPosLong", longitude);
+                editor.commit();
+
                 startActivity(in);
             }
-
         }
 
         return false;
@@ -382,6 +464,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // other 'case' lines to check for other permissions this app might request.
             // You can add here other case statements according to your requirement.
         }
+    }
+
+    @Override
+    public void onDirectionSuccess(Direction direction, String rawBody) {
+
+            Toast.makeText(getApplicationContext(), "Success with status : " + direction.getStatus(),
+                    Toast.LENGTH_SHORT).show();
+
+        if (direction.isOK()) {
+            for (int i = 0; i < direction.getRouteList().size(); i++) {
+                Route route = direction.getRouteList().get(i);
+                String color = colors[i % colors.length];
+                ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
+                 mMap.addPolyline(DirectionConverter.createPolyline(this, directionPositionList, 5,
+                         Color.parseColor(color)));
+            }
+
+
+        }
+    }
+
+    @Override
+    public void onDirectionFailure(Throwable t) {
+        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     class getMarkerInfo extends AsyncTask<String, String, String> {
@@ -445,13 +551,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 .snippet(deskripsi)
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory
                                         .HUE_GREEN)));
+
                     }
+
                     mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
                         public void onInfoWindowClick(Marker marker) {
                             if(marker.getTitle().contains("restaurant")||
                                     marker.getTitle().contains("Restaurant")) {
-
                                 onMarkerClick(marker);
                             }
                         }
@@ -461,9 +568,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
+
+
     }
-
-
-
 
 }

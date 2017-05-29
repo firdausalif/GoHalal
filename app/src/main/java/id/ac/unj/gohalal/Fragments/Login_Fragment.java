@@ -228,7 +228,7 @@ public class Login_Fragment extends Fragment implements OnClickListener {
 			return json;
 		}
 
-		protected void onPostExecute(JSONObject result) {
+		protected void onPostExecute(JSONObject result){
 			// dismiss the dialog once product deleted
 			//Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
 			try {
@@ -242,6 +242,8 @@ public class Login_Fragment extends Fragment implements OnClickListener {
 						editor.commit();
 						Toast.makeText(getActivity(), result.getString("msg"),Toast.LENGTH_LONG).show();
 						Intent intent = new Intent(getActivity(), MapsActivity.class);
+                        intent.putExtra("onClick", false);
+
 						pDialog.dismiss();
 						startActivity(intent);
 					} else {
